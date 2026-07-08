@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public class CategoryResponse {
     private Long cateId;
     private String cateName;
+    private String image;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long userId;

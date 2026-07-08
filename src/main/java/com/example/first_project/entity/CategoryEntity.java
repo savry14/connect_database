@@ -12,6 +12,7 @@ public class CategoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cateId;
     private String cateName;
+    private String image;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
