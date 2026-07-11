@@ -10,5 +10,5 @@ public class CategoryResponse {
     private String image;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Long userId;
+//    private Long userId;
 }
