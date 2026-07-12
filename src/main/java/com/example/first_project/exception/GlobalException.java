@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalException {
-    @ExceptionHandler(CategoryNotFound.class)
-    ResponseEntity<?> NotResponseEntity(CategoryNotFound e){
+    @ExceptionHandler(FileNotFound.class)
+    ResponseEntity<?> NotResponseEntity(FileNotFound e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(e.getMessage());
     }

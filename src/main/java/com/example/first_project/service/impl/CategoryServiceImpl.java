@@ -3,7 +3,7 @@ package com.example.first_project.service.impl;
 import com.example.first_project.dto.request.CategoryRequest;
 import com.example.first_project.dto.response.CategoryResponse;
 import com.example.first_project.entity.CategoryEntity;
-import com.example.first_project.exception.CategoryNotFound;
+import com.example.first_project.exception.FileNotFound;
 import com.example.first_project.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -70,14 +70,14 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteCategory(Long id){
         CategoryEntity category = categoryRepository.findById(id)
-                .orElseThrow(()-> new CategoryNotFound("Category not found!"));
+                .orElseThrow(()-> new FileNotFound("Category not found!"));
         categoryRepository.delete(category);
     }
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest, MultipartFile file) throws IOException {
         CategoryEntity updatedCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFound("Category not found"));
+                .orElseThrow(() -> new FileNotFound("Category not found"));
 
         String fileName = file.getOriginalFilename();
         String fileUrl = UUID.randomUUID() + "_" + fileName;
