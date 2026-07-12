@@ -3,8 +3,10 @@ package com.example.first_project.service.impl;
 import com.example.first_project.dto.request.CategoryRequest;
 import com.example.first_project.dto.response.CategoryResponse;
 import com.example.first_project.entity.CategoryEntity;
+import com.example.first_project.entity.UserEntity;
 import com.example.first_project.exception.FileNotFound;
 import com.example.first_project.repository.CategoryRepository;
+import com.example.first_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +25,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Override
     public CategoryResponse create(CategoryRequest categoryRequest, MultipartFile file) throws IOException{
+        UserEntity user = userRepository.findById(categoryRequest.getUserId())
+                .orElseThrow(() -> new FileNotFound("User not found"));
+
         String fileName = file.getOriginalFilename();
         String fileUrl = UUID.randomUUID().toString()+"_"+fileName;
         Path path = Paths.get("uploads");
@@ -38,6 +44,7 @@ public class CategoryServiceImpl implements CategoryService{
         Files.copy(file.getInputStream(), path.resolve(fileUrl), StandardCopyOption.REPLACE_EXISTING);
         CategoryEntity category = new CategoryEntity();
         category.setImage(imageUrl);
+        category.setUser(user);
         category.setCateName(categoryRequest.getCateName());
         category.setCreatedAt(LocalDateTime.now());
         category.setUpdatedAt(LocalDateTime.now());
@@ -49,6 +56,9 @@ public class CategoryServiceImpl implements CategoryService{
         categoryResponse.setImage(category.getImage());
         categoryResponse.setCreatedAt(category.getCreatedAt());
         categoryResponse.setUpdatedAt(category.getUpdatedAt());
+        categoryResponse.setUserId(category.getUser().getId());
+
+
         return categoryResponse;
     }
     @Override
@@ -62,6 +72,9 @@ public class CategoryServiceImpl implements CategoryService{
             categoryResponse.setImage(category.getImage());
             categoryResponse.setCreatedAt(category.getCreatedAt());
             categoryResponse.setUpdatedAt(category.getUpdatedAt());
+            if (category.getUser() != null) {
+                categoryResponse.setUserId(category.getUser().getId());
+            }
             categoryResponses.add(categoryResponse);
         }
         return categoryResponses;
@@ -76,8 +89,11 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest, MultipartFile file) throws IOException {
-        CategoryEntity updatedCategory = categoryRepository.findById(id)
+        CategoryEntity updatedCategory= categoryRepository.findById(id)
                 .orElseThrow(() -> new FileNotFound("Category not found"));
+
+        UserEntity user = userRepository.findById(categoryRequest.getUserId())
+                .orElseThrow(() -> new FileNotFound("User not found"));
 
         String fileName = file.getOriginalFilename();
         String fileUrl = UUID.randomUUID() + "_" + fileName;
@@ -93,6 +109,8 @@ public class CategoryServiceImpl implements CategoryService{
                 StandardCopyOption.REPLACE_EXISTING);
         updatedCategory.setCateName(categoryRequest.getCateName());
         updatedCategory.setImage(imageUrl);
+        updatedCategory.setUser(user);
+        updatedCategory.setCreatedAt(updatedCategory.getCreatedAt());;
         updatedCategory.setUpdatedAt(LocalDateTime.now());
         updatedCategory = categoryRepository.save(updatedCategory);
 
@@ -102,6 +120,7 @@ public class CategoryServiceImpl implements CategoryService{
         response.setImage(updatedCategory.getImage());
         response.setCreatedAt(updatedCategory.getCreatedAt());
         response.setUpdatedAt(updatedCategory.getUpdatedAt());
+        response.setUserId(updatedCategory.getUser().getId());
 
         return response;
     }

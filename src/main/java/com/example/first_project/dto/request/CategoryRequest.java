@@ -6,5 +6,5 @@ import lombok.Data;
 public class CategoryRequest {
     private String cateName;
     private String image;
-//    private Long userId;
+    private Long userId;
 }

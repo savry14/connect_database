@@ -11,23 +11,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
+
     @GetMapping
     public List<UserEntity> getAll() {
         return service.getAll();
     }
+
     @GetMapping("/{id}")
     public UserEntity getById(@PathVariable Long id) {
         return service.getById(id);
     }
+
     @PostMapping
     public UserEntity create(@RequestBody UserEntity user) {
         return service.save(user);
     }
+
     @PutMapping("/{id}")
     public UserEntity update(@PathVariable Long id,
                              @RequestBody UserEntity user) {
         return service.update(id, user);
     }
+
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id) {
         service.delete(id);
