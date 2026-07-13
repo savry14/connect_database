@@ -1,5 +1,6 @@
 package com.example.first_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class CategoryEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

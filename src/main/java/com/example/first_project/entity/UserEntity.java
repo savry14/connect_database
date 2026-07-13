@@ -1,10 +1,14 @@
 package com.example.first_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -39,5 +43,13 @@ public class UserEntity {
     }
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    @JsonIgnore
     private List<CategoryEntity> categoryEntities;
+    @JsonProperty("categoryIds")
+    public List<Long> getCategoryIds() {
+        return categoryEntities.stream()
+                .map(CategoryEntity::getCateId)
+                .collect(Collectors.toList());
+    }
 }

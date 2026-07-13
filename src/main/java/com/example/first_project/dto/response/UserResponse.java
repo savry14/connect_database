@@ -3,6 +3,8 @@ package com.example.first_project.dto.response;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 
 public class UserResponse {
@@ -12,4 +14,5 @@ public class UserResponse {
     private String email;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<Long> categoryIds;
 }
